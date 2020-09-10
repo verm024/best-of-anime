@@ -503,6 +503,7 @@ export default {
                         }
                     }
                 })
+                let dateCreated = new Date()
                 let poll_data = {
                     title: this.poll_form.title,
                     description: this.poll_form.description,
@@ -511,7 +512,7 @@ export default {
                     status: 'ongoing',
                     poster: 'https://drive.google.com/uc?export=view&id=1eWGglGDSa82GU1lHLDY8kEXynlD3a4b_',
                     user: firebase.db.collection('users').doc(this.currentUser.uid),
-                    date_created: new Date(),
+                    date_created: dateCreated,
                     requested: requested,
                     poll_voted: 0
                 }
@@ -535,6 +536,7 @@ export default {
                     }
                     try {
                         await firebase.db.collection('polls').doc(uploadedData.id).update({poster: downloadUrl})
+                        await firebase.db.collection('users').doc(this.currentUser.uid).collection('polls').doc(uploadedData.id).set({poll: firebase.db.collection('polls').doc(uploadedData.id), date_created: dateCreated})
                     } catch (error) {
                         console.log(error)
                     }
@@ -542,7 +544,7 @@ export default {
                 this.add_preloader_running = false
                 this.add_preloader_finish = true
                 setTimeout(() => {
-                    this.$router.push('/poll')
+                    this.$router.push('/poll/ongoing')
                 }, 3000)
             }
         },

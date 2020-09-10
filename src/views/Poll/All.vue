@@ -6,7 +6,7 @@
                     <v-autocomplete hide-details dark v-model="search.model" label="Search Poll by Title" :search-input.sync="input" :items="search.items" @change="goToPollPage()"></v-autocomplete>
                 </div>
                 <div class="poll-all-add ml-6">
-                    <v-btn v-if="userProfile.rank >= 5" to="/poll/new" color="#f4f4f6">
+                    <v-btn v-if="userProfile.rank >= 5" to="/newpoll" color="#f4f4f6">
                         <span v-if="userProfile.rank <= 9">Request poll</span>
                         <span v-else>New poll</span>
                     </v-btn>

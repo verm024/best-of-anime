@@ -8,6 +8,7 @@ import ProfileEdit from '../views/ProfileEdit.vue'
 import ConfirmPassword from '../views/ConfirmPassword.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import ModeratorDashboard from '../views/ModeratorDashboard.vue'
+import History from '../views/History.vue'
 import PollAll from '../views/Poll/All.vue'
 import PollNew from '../views/Poll/New.vue'
 import PollDetail from '../views/Poll/Detail.vue'
@@ -83,7 +84,7 @@ Vue.use(VueRouter)
     }
   },
   {
-    path: '/poll/new',
+    path: '/newpoll',
     name: "PollNew",
     component: PollNew,
     meta: {

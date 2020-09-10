@@ -56,7 +56,7 @@ export default {
             let totalVoted = this.poll_data[0].poll_voted + 1
             let newExp = this.userProfile.exp + 50 * ((15 + this.poll_data[0].nominations.length) / 10)
             try {
-                await firebase.db.collection('users').doc(this.currentUser.uid).collection('votes').doc(this.$route.params.date).set({index_voted: this.vote_choice})
+                await firebase.db.collection('users').doc(this.currentUser.uid).collection('votes').doc(this.$route.params.date).set({poll: firebase.db.collection('polls').doc(this.poll_data[0]["id"]), index_voted: this.vote_choice, date_created: new Date()})
                 await firebase.db.collection('polls').doc(this.poll_data[0]["id"]).update({ nominations: nominationsData, poll_voted: totalVoted })
                 await firebase.db.collection('users').doc(this.currentUser.uid).update({exp: newExp})
             } catch (error) {
