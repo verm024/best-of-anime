@@ -77,9 +77,9 @@ export default {
     return {
       app_background: 'background: linear-gradient(116.82deg, #0E1C2F 0%, #050910 100%)',
       flat: true,
-      navbar_items: ['Home', 'Profile', 'Logout'],
-      navbar_items_admin: ['Home', 'Profile', 'Admin', 'Moderator', 'Logout'],
-      navbar_items_moderator: ['Home', 'Profile', 'Moderator', 'Logout']
+      navbar_items: ['Home', 'History', 'Profile', 'Logout'],
+      navbar_items_admin: ['Home', 'History', 'Profile', 'Admin', 'Moderator', 'Logout'],
+      navbar_items_moderator: ['Home', 'History', 'Profile', 'Moderator', 'Logout']
     }
   },
   methods: {
@@ -89,6 +89,9 @@ export default {
       }
       else if(choosenValue == 'Logout'){
         this.logout()
+      }
+      else if(choosenValue == 'History' && this.$route.fullPath != '/history'){
+        this.$router.push('/history')
       }
       else if(choosenValue == 'Home' && this.$route.fullPath != '/'){
         this.$router.push('/')

@@ -21,7 +21,7 @@
                 </div>
                 <div v-if="polls_requested.length == 0" class="moderator-dashboard-section-subtitle">
                     <span>
-                        Noting to show...
+                        Nothing to show...
                     </span>
                 </div>
                 <div class="moderator-dashboard-list moderator-dashboard-request d-flex flex-column">
@@ -62,7 +62,7 @@
                 </div>
                 <div v-if="polls_rejected.length == 0" class="moderator-dashboard-section-subtitle">
                     <span>
-                        Noting to show...
+                        Nothing to show...
                     </span>
                 </div>
                 <div class="moderator-dashboard-list moderator-dashboard-reject d-flex flex-column">
@@ -106,7 +106,7 @@
                 </div>
                 <div v-if="polls_canceled.length == 0" class="moderator-dashboard-section-subtitle">
                     <span>
-                        Noting to show...
+                        Nothing to show...
                     </span>
                 </div>
                 <div class="moderator-dashboard-list moderator-dashboard-cancel d-flex flex-column">
@@ -221,7 +221,7 @@ export default {
                 console.log(error)
             }
             if(status == 'rejected'){
-                data.forEach((snapshot, index) => {
+                data.docs.forEach((snapshot, index) => {
                     this.polls_rejected.push(snapshot.data())
                     if(index == data.size - 1){
                         this.poll_rejected_last_visible = snapshot.data()
@@ -229,7 +229,7 @@ export default {
                 })
             }
             else{
-                data.forEach((snapshot, index) => {
+                data.docs.forEach((snapshot, index) => {
                     this.polls_canceled.push(snapshot.data())
                     if(index == data.size - 1){
                         this.poll_canceled_last_visible = snapshot.data()
@@ -268,10 +268,6 @@ export default {
         font-size: 40px !important;
         font-weight: 700;
     }
-
-    /* .moderator-dashboard-request{
-        margin-top: 25px;
-    } */
 
     .moderator-dashboard-section-title{
         font-size: 24px;

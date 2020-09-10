@@ -93,6 +93,14 @@ Vue.use(VueRouter)
     }
   },
   {
+    path: '/history',
+    name: 'History',
+    component: History,
+    meta: {
+      requiresLogin: true
+    }
+  },
+  {
     path: '/poll/detail/:date',
     name: "PollDetail",
     component: PollDetail,
