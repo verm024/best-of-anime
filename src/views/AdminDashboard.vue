@@ -15,7 +15,7 @@
                                 <v-autocomplete clearable label="Search by Email" no-filter v-model="search_model" :search-input.sync="search" :items="search_items" dark @change="searchItemClick"></v-autocomplete>
                             </div>
                             <v-card color="#142A49" class="admin-dashboard-card-info" rounded="xl">
-                                <v-card-text class="d-flex">
+                                <v-card-text v-if="search_item_data" class="d-flex">
                                     <div class="admin-dashboard-card-info-image">
                                         <v-img :src="search_item_data.profile_picture" class="justify-start" width="100px" height="100px">
 
