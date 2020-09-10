@@ -151,11 +151,11 @@ export default {
     }
 
     .poll-all-list{
-        margin-top: 50px;
+        margin-top: 75px;
     }
 
     .poll-all-list-item{
-        margin-bottom: 50px;
+        margin-bottom: 60px;
     }
 
     .poll-all-list-item hr{
@@ -163,7 +163,7 @@ export default {
     }
 
     .poll-all-list-item-content{
-        margin-bottom: 35px;
+        margin-bottom: 40px;
         padding-left: 30px;
         padding-right: 30px;
     }
