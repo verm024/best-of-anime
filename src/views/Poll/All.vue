@@ -14,30 +14,48 @@
             </div>
             <div class="poll-all-list">
                 <div v-for="(item, index) in polls" :key="index" class="poll-all-list-item">
-                    <div class="poll-all-list-item-content d-flex flex-row align-start">
-                        <div class="poll-all-list-item-content-image">
-                            <v-img :src="item.poster" :height="$vuetify.breakpoint.width < 960 ? '150px' : '200px'" :width="$vuetify.breakpoint.width < 960 ? '150px' : '200px'">
-                            </v-img>
-                        </div>
-                        <div class="poll-all-list-item-content-text ml-6 ml-md-10">
-                            <div class="poll-all-list-item-content-text-title">
-                                <span>{{ item.title }}</span>
+                    <v-hover>
+                        <template v-slot:default="{ hover }">
+                            <div class="poll-all-list-item-content d-flex flex-row align-start" @click="goToPollPageFromList(item.date_created)">
+                                <div class="poll-all-list-item-content-image">
+                                    <v-img :src="item.poster" :height="$vuetify.breakpoint.width < 960 ? '150px' : '200px'" :width="$vuetify.breakpoint.width < 960 ? '150px' : '200px'">
+                                    </v-img>
+                                </div>
+                                <div class="poll-all-list-item-content-text ml-6 ml-md-10">
+                                    <div v-if="!hover" class="poll-all-list-item-content-text-title">
+                                        <span>{{ item.title }}</span>
+                                    </div>
+                                    <div v-else class="poll-all-list-item-content-text-title-hover">
+                                        <span>{{ item.title }}</span>
+                                    </div>
+                                    <div class="poll-all-list-item-content-text-description">
+                                        <span>{{ item.description }}</span>
+                                    </div>
+                                    <div class="poll-all-list-item-content-text-type">
+                                        <span>{{ item.type }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="poll-all-list-item-content-text-description">
-                                <span>{{ item.description }}</span>
-                            </div>
-                            <div class="poll-all-list-item-content-text-type">
-                                <span>{{ item.type }}</span>
-                            </div>
-                        </div>
-                    </div>
+                        </template>
+                    </v-hover>
                     <hr>
                 </div>
             </div>
-            <div class="poll-all-load">
+            <div class="poll-all-load" v-if="!load_preloader">
                 <v-btn color="#f4f4f6" rounded @click="loadMorePoll()" v-if="polls.length < poll_counter.current - 1">load more</v-btn>
             </div>
-            <Footer class="footer-poll-all"></Footer>
+            <v-dialog v-model="load_preloader" width="250px" persistent >
+                <v-card rounded="xl" class="poll-all-preloader-card" color="#13252F">
+                    <v-card-text>
+                        <v-row class="justify-center">
+                            <v-col class="col-12 text-center">
+                                <span class="headline white--text">Loading polls...</span>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+            <Footer v-if="!load_preloader" class="footer-poll-all"></Footer>
         </div>
     </div>
 </template>
@@ -60,7 +78,8 @@ export default {
                 items: [],
                 items_date: []
             },
-            input: null
+            input: null,
+            load_preloader: false,
         }
     },
     computed: {
@@ -88,9 +107,13 @@ export default {
             })
             let date = this.search.items_date[i]
             this.$router.push('/poll/detail/' + date.seconds + '+' + date.nanoseconds)
+        },
+        goToPollPageFromList(date){
+            this.$router.push('/poll/detail/' + date.seconds + '+' + date.nanoseconds)
         }
     },
     async created(){
+        this.load_preloader = true
         let data
         this.poll_counter = await firebase.db.collection('counter').doc('poll_counter').get()
         this.poll_counter = this.poll_counter.data()
@@ -105,6 +128,7 @@ export default {
                 this.poll_last_visible = snapshot.data()
             }
         })
+        this.load_preloader = false
     },
     watch: {
         async input(val) {
@@ -166,19 +190,29 @@ export default {
         margin-bottom: 40px;
         padding-left: 30px;
         padding-right: 30px;
+        cursor: pointer;
     }
 
     .poll-all-list-item-content-text{
         margin-top: 30px;
     }
 
-    .poll-all-list-item-content-text-title{
+    .poll-all-list-item-content-text-title, .poll-all-list-item-content-text-title-hover{
         margin-bottom: 5px;
+    }
+
+    .poll-all-list-item-content-text-title-hover span{
+        color: #519A9E;
+        text-decoration: underline;
+        font-size: 18px;
+        font-weight: 700;
+        transition: ease-in-out .2s;
     }
 
     .poll-all-list-item-content-text-title span{
         font-size: 18px;
         font-weight: 700;
+        transition: ease-in-out .2s;
     }
 
     .poll-all-list-item-content-text-description{
@@ -218,6 +252,10 @@ export default {
 
     .footer-poll-all{
         margin-top: 125px;
+    }
+
+    .poll-all-preloader-card{
+        padding-top: 20px;
     }
     
 </style>
