@@ -67,7 +67,7 @@
                     <span class="section-title">
                         <i>LATEST POLL</i>
                     </span>
-                    <span class="section-view-more ml-auto" @click="$router.push('/poll')">
+                    <span class="section-view-more ml-auto" @click="$router.push('/poll/latest')">
                         <u>View more</u>
                         <v-icon dark>mdi-chevron-double-right</v-icon>
                     </span>
