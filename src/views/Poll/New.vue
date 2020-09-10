@@ -519,7 +519,7 @@ export default {
                 try {
                     uploadedData = await firebase.db.collection('polls').add(poll_data)
                     if(status != 'requested'){
-                        await firebase.db.collection('counter').doc('poll_counter').set({ current: this.poll_counter.current + 1 })
+                        await firebase.db.collection('counter').doc('poll_counter').set({ current: this.poll_counter.current + 1, active: this.poll_counter.active + 1 })
                     }
                 } catch (error) {
                     console.log(error)

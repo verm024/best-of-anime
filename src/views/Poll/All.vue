@@ -1,23 +1,51 @@
 <template>
     <div class="poll-all">
-        <div class="container page-wrapped">
-
+        <div class="container page-wrapped custom-container-xl-2">
+            <div class="poll-all-search-add d-flex align-end">
+                <div class="poll-all-search">
+                    <v-autocomplete hide-details dark v-model="search.model" label="Search Poll by Title" :search-input.sync="input" :items="search.items" @change="goToPollPage()"></v-autocomplete>
+                </div>
+                <div class="poll-all-add ml-6">
+                    <v-btn v-if="userProfile.rank >= 5" to="/poll/new" color="#f4f4f6">
+                        <span v-if="userProfile.rank <= 9">Request poll</span>
+                        <span v-else>New poll</span>
+                    </v-btn>
+                </div>
+            </div>
+            <div class="poll-all-list">
+                <div v-for="(item, index) in polls" :key="index" class="poll-all-list-item">
+                    <div class="poll-all-list-item-content d-flex flex-row align-start">
+                        <div class="poll-all-list-item-content-image">
+                            <v-img :src="item.poster" :height="$vuetify.breakpoint.width < 960 ? '150px' : '200px'" :width="$vuetify.breakpoint.width < 960 ? '150px' : '200px'">
+                            </v-img>
+                        </div>
+                        <div class="poll-all-list-item-content-text ml-6 ml-md-10">
+                            <div class="poll-all-list-item-content-text-title">
+                                <span>{{ item.title }}</span>
+                            </div>
+                            <div class="poll-all-list-item-content-text-description">
+                                <span>{{ item.description }}</span>
+                            </div>
+                            <div class="poll-all-list-item-content-text-type">
+                                <span>{{ item.type }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div class="poll-all-load">
+                <v-btn color="#f4f4f6" rounded @click="loadMorePoll()" v-if="polls.length < poll_counter.current - 1">load more</v-btn>
+            </div>
+            <Footer class="footer-poll-all"></Footer>
         </div>
-        <v-btn v-if="userProfile.rank >= 5" to="/poll/new" color="success">
-            <span v-if="userProfile.rank <= 9">Request poll</span>
-            <span v-else>New poll</span>
-        </v-btn>
-        <v-autocomplete v-model="search.model" :search-input.sync="input" :items="search.items" @change="test()"></v-autocomplete>
-        <div v-for="(item, index) in polls" :key="index">
-            <span @click="$router.push('/poll/detail/' + item.date_created.seconds + '+' + item.date_created.nanoseconds)">{{ item.title }}</span>
-        </div>
-        <v-btn color="primary" @click="loadMorePoll()" v-if="polls.length < poll_counter.current - 1">loadmore</v-btn>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import firebase from '../../firebase'
+import firebase from '@/firebase'
+import Footer from '@/components/Footer.vue'
 
 export default {
     name: "PollAll",
@@ -53,7 +81,7 @@ export default {
                 }
             })
         },
-        test(){
+        goToPollPage(){
             let temp = this.search.model
             let i = this.search.items.findIndex(function (model){
                 return model == temp
@@ -97,5 +125,111 @@ export default {
             }
         }
     },
+    components: {
+        Footer
+    }
 }
 </script>
+
+<style scoped>
+    .poll-all-search-add{
+        margin-top: 50px;
+    }
+
+    .poll-all-search{
+        width: 100%;
+    }
+
+    .poll-all-add .v-btn{
+        padding: 20px 28px 20px 28px;
+    }
+
+    .poll-all-add .v-btn span{
+        font-weight: 600;
+        letter-spacing: 0;
+        color: #0E1D31 !important;
+    }
+
+    .poll-all-list{
+        margin-top: 50px;
+    }
+
+    .poll-all-list-item{
+        margin-bottom: 50px;
+    }
+
+    .poll-all-list-item hr{
+        opacity: .8;
+    }
+
+    .poll-all-list-item-content{
+        margin-bottom: 35px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .poll-all-list-item-content-text{
+        margin-top: 30px;
+    }
+
+    .poll-all-list-item-content-text-title{
+        margin-bottom: 5px;
+    }
+
+    .poll-all-list-item-content-text-title span{
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .poll-all-list-item-content-text-description{
+        margin-bottom: 25px;
+        max-height: 96px;
+        overflow: auto;
+    }
+
+    .poll-all-list-item-content-text-description span{
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .poll-all-list-item-content-text-type span{
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0;
+        width: auto;
+        background: #519A9E;
+        border-radius: 23px;
+        padding: 6px 14px 6px 14px;
+        text-transform: uppercase;
+    }
+
+    .poll-all-load{
+        width: 100%;
+        text-align: center;
+        margin-top: 75px;
+    }
+
+    .poll-all-load .v-btn{
+        font-weight: 600;
+        letter-spacing: 0;
+        color: #0E1D31 !important;
+        padding: 20px 28px 20px 28px;
+    }
+
+    .footer-poll-all{
+        margin-top: 125px;
+    }
+    
+</style>
+
+<style>
+    .custom-container-xl-2{
+        width: 90% !important;
+    }
+
+    @media screen and (min-width: 1904px){
+        .custom-container-xl-2{
+            width: 76% !important;
+        }
+    }
+</style>
