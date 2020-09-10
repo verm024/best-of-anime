@@ -42,7 +42,8 @@
                 </div>
             </div>
             <div class="poll-all-load" v-if="!load_preloader">
-                <v-btn color="#f4f4f6" rounded @click="loadMorePoll()" v-if="polls.length < poll_counter.current - 1">load more</v-btn>
+                <v-btn color="#f4f4f6" rounded @click="loadMorePoll()" v-if="$route.params.status == 'ongoing' && polls.length < poll_counter.active - 1">load more</v-btn>
+                <v-btn color="#f4f4f6" rounded @click="loadMorePoll()" v-if="$route.params.status == 'ended' && polls.length < poll_counter.ended - 1">load more</v-btn>
             </div>
             <v-dialog v-model="load_preloader" width="250px" persistent >
                 <v-card rounded="xl" class="poll-all-preloader-card" color="#13252F">
@@ -89,7 +90,12 @@ export default {
         async loadMorePoll(){
             let data
             try {
-                data = await firebase.db.collection('polls').orderBy('date_created', 'desc').startAfter(this.poll_last_visible.date_created).where('status', '==', 'ongoing').where('requested', '==', false).limit(5).get()
+                if(this.$route.params.status == 'ongoing'){
+                    data = await firebase.db.collection('polls').orderBy('date_created', 'desc').startAfter(this.poll_last_visible.date_created).where('status', '==', 'ongoing').where('requested', '==', false).limit(5).get()
+                }
+                else{
+                    data = await firebase.db.collection('polls').orderBy('date_created', 'desc').startAfter(this.poll_last_visible.date_created).where('status', '==', 'ended').where('requested', '==', false).limit(5).get()
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -118,7 +124,12 @@ export default {
         this.poll_counter = await firebase.db.collection('counter').doc('poll_counter').get()
         this.poll_counter = this.poll_counter.data()
         try {
-            data = await firebase.db.collection('polls').orderBy('date_created', 'desc').where('status', '==', 'ongoing').where('requested', '==', false).limit(10).get()
+            if(this.$route.params.status == 'ongoing'){
+                data = await firebase.db.collection('polls').orderBy('date_created', 'desc').where('status', '==', 'ongoing').where('requested', '==', false).limit(10).get()
+            }
+            else if(this.$route.params.status == 'ended'){
+                data = await firebase.db.collection('polls').orderBy('date_created', 'desc').where('status', '==', 'ended').where('requested', '==', false).limit(10).get()
+            }
         } catch (error) {
             console.log(error)
         }
@@ -137,7 +148,12 @@ export default {
             if(val != null && val != ''){
                 let data
                 try {
-                    data = await firebase.db.collection('polls').orderBy('title').startAt(val).endAt(val + '\uf8ff').where('status', '==', 'ongoing').where('requested', '==', false).limit(5).get()
+                    if(this.$route.params.status == 'ongoing'){
+                        data = await firebase.db.collection('polls').orderBy('title').startAt(val).endAt(val + '\uf8ff').where('status', '==', 'ongoing').where('requested', '==', false).limit(10).get()
+                    }
+                    else if(this.$route.params.status == 'ended'){
+                        data = await firebase.db.collection('polls').orderBy('title').startAt(val).endAt(val + '\uf8ff').where('status', '==', 'ended').where('requested', '==', false).limit(10).get()
+                    }
                 } catch (error) {
                     console.log(error)
                 }
@@ -151,6 +167,14 @@ export default {
     },
     components: {
         Footer
+    },
+    beforeRouteEnter (to, from, next) {
+        if(to.params.status == 'ongoing' || to.params.status == 'ended'){
+            next()
+        }
+        else{
+            next('/unauthorized')
+        }
     }
 }
 </script>

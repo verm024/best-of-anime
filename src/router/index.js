@@ -75,7 +75,7 @@ Vue.use(VueRouter)
     }
   },
   {
-    path: '/poll/latest',
+    path: '/poll/:status',
     name: "PollAll",
     component: PollAll,
     meta: {
