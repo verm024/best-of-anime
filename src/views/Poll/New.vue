@@ -508,6 +508,8 @@ export default {
                     title: this.poll_form.title,
                     description: this.poll_form.description,
                     type: this.poll_form.type,
+                    season: this.poll_form.season,
+                    year: this.poll_form.year,
                     nominations: nominations,
                     status: 'ongoing',
                     poster: 'https://drive.google.com/uc?export=view&id=1eWGglGDSa82GU1lHLDY8kEXynlD3a4b_',
