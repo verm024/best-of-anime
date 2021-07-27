@@ -3,14 +3,14 @@ import 'firebase/firestore'
 import 'firebase/storage'
 
 const config = {
-    apiKey: "AIzaSyAqH7E0MWtxsLjmdqbsnixrmZHPb9bLAl0",
-    authDomain: "anivote-f8b22.firebaseapp.com",
-    databaseURL: "https://anivote-f8b22.firebaseio.com",
-    projectId: "anivote-f8b22",
-    storageBucket: "anivote-f8b22.appspot.com",
-    messagingSenderId: "680901941858",
-    appId: "1:680901941858:web:64060833a99762a45d0f3b",
-    measurementId: "G-GKZFNK5YDJ"
+    apiKey: process.env.VUE_APP_FIREBASE_APIKEY,
+    authDomain: process.env.VUE_APP_FIREBASE_AUTHDOMAIN,
+    databaseURL: process.env.VUE_APP_FIREBASE_DATABASEURL,
+    projectId: process.env.VUE_APP_FIREBASE_PROJECTID,
+    storageBucket: process.env.VUE_APP_FIREBASE_STORAGEBUCKET,
+    messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID,
+    appId: process.env.VUE_APP_FIREBASE_APPID,
+    measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENTID
 }
 
 firebase.initializeApp(config)
